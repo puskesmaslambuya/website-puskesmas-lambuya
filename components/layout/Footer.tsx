@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   MapPinIcon,
   PhoneIcon,
@@ -21,8 +22,14 @@ export default function Footer() {
         {/* Identitas */}
         <div>
           <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-lg font-bold text-white">
-              PL
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white p-1">
+              <Image
+                src="/images/logo.png"
+                alt={`Logo ${SITE_CONFIG.name}`}
+                width={36}
+                height={36}
+                className="h-full w-full object-contain"
+              />
             </div>
             <p className="font-heading text-base font-semibold text-white">
               {SITE_CONFIG.name}
