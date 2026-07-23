@@ -13,7 +13,7 @@ type DataTableProps = {
   records: AdminRecord[];
 };
 
-function formatCell(value: string | number | boolean | null) {
+function formatCell(value: string | number | boolean | null | undefined) {
   if (typeof value === "boolean") return value ? "Ya" : "Tidak";
   if (value === null || value === undefined || value === "") return "-";
   return String(value);
