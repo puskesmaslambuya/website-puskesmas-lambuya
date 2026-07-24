@@ -4,26 +4,33 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { HERO_SLIDES } from "@/lib/data/home";
+import type { HeroSlide } from "@/types/home";
 import { cn } from "@/lib/utils";
 
 const AUTOPLAY_INTERVAL_MS = 6000;
 
-export default function HeroBanner() {
+type HeroBannerProps = {
+  slides: HeroSlide[];
+};
+
+export default function HeroBanner({ slides }: HeroBannerProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const goTo = useCallback((index: number) => {
-    setActiveIndex((index + HERO_SLIDES.length) % HERO_SLIDES.length);
-  }, []);
+  const goTo = useCallback(
+    (index: number) => {
+      setActiveIndex((index + slides.length) % slides.length);
+    },
+    [slides.length]
+  );
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+      setActiveIndex((prev) => (prev + 1) % slides.length);
     }, AUTOPLAY_INTERVAL_MS);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
-  const slide = HERO_SLIDES[activeIndex] ?? HERO_SLIDES[0];
+  const slide = slides[activeIndex] ?? slides[0];
 
   if (!slide) {
     return null;
@@ -76,7 +83,7 @@ export default function HeroBanner() {
                 <ChevronLeftIcon className="h-4 w-4" />
               </button>
               <div className="flex gap-2">
-                {HERO_SLIDES.map((item, index) => (
+                {slides.map((item, index) => (
                   <button
                     key={item.id}
                     type="button"
@@ -100,24 +107,33 @@ export default function HeroBanner() {
             </div>
           </div>
 
-          {/* Ilustrasi placeholder — ganti dengan foto gedung/kegiatan asli */}
+          {/* Foto slide asli (jika ada), atau placeholder */}
           <motion.div
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative mx-auto aspect-[4/3] w-full max-w-md rounded-2xl bg-gradient-to-br
+            className="relative mx-auto aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl bg-gradient-to-br
               from-primary/15 via-white to-secondary/15 shadow-card"
           >
-            <div className="flex h-full items-center justify-center">
-              <div className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-2xl font-bold text-white">
-                  PL
+            {slide.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={slide.imageUrl}
+                alt={slide.title}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <div className="text-center">
+                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-2xl font-bold text-white">
+                    PL
+                  </div>
+                  <p className="mt-3 text-sm font-medium text-slate-500">
+                    Foto Gedung Puskesmas Lambuya
+                  </p>
                 </div>
-                <p className="mt-3 text-sm font-medium text-slate-500">
-                  Foto Gedung Puskesmas Lambuya
-                </p>
               </div>
-            </div>
+            )}
           </motion.div>
         </div>
       </div>

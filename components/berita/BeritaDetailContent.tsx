@@ -26,8 +26,16 @@ export default function BeritaDetailContent({ berita }: BeritaDetailContentProps
           </span>
         </div>
 
-        {/* Placeholder cover — ganti dengan foto berita asli */}
-        <div className={cn("mt-6 aspect-[16/9] rounded-2xl bg-gradient-to-br", berita.coverColor)} />
+        {berita.coverImageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={berita.coverImageUrl}
+            alt={berita.title}
+            className="mt-6 aspect-[16/9] w-full rounded-2xl object-cover"
+          />
+        ) : (
+          <div className={cn("mt-6 aspect-[16/9] rounded-2xl bg-gradient-to-br", berita.coverColor)} />
+        )}
 
         <div className="mt-8 space-y-4 text-sm leading-relaxed text-slate-700 md:text-base">
           {berita.content.map((paragraf, index) => (

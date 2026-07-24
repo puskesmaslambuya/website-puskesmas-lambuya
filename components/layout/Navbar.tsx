@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Bars3Icon,
@@ -35,14 +34,9 @@ export default function Navbar() {
       {/* Navbar utama */}
       <nav className="container-page flex items-center justify-between py-3">
         <Link href="/" className="flex items-center gap-3">
-          <Image
-            src="/images/logo.png"
-            alt={`Logo ${SITE_CONFIG.name}`}
-            width={44}
-            height={44}
-            priority
-            className="h-11 w-11 object-contain"
-          />
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-lg font-bold text-white">
+            PL
+          </div>
           <div className="leading-tight">
             <p className="font-heading text-base font-semibold text-slate-900">
               {SITE_CONFIG.name}

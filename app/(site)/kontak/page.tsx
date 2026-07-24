@@ -71,6 +71,7 @@ export default async function KontakPage() {
 
       <section className="section-y">
         <div className="container-page grid grid-cols-1 gap-8 lg:grid-cols-5">
+          {/* Google Maps */}
           <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-card lg:col-span-3">
             <iframe
               src={mapsEmbedUrl}
@@ -81,6 +82,7 @@ export default async function KontakPage() {
             />
           </div>
 
+          {/* Info kontak */}
           <div className="flex flex-col gap-3 lg:col-span-2">
             <KontakInfoItem icon={MapPinIcon} label="Alamat" value={address} />
             <KontakInfoItem

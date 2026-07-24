@@ -12,6 +12,8 @@ export type GaleriFoto = {
   date: string; // ISO date string
   /** Placeholder visual (gradasi warna) sebelum ada foto asli. */
   color: string;
+  /** URL foto asli dari Supabase Storage (tabel `galeri_foto`), jika ada. */
+  imageUrl?: string;
 };
 
 export type GaleriVideo = {

@@ -1,8 +1,6 @@
-# Konfigurasi Cloudflare Pages / Wrangler.
+# Konfigurasi Cloudflare Workers untuk Next.js (native "wrangler deploy", BUKAN Cloudflare Pages).
 # compatibility_flags "nodejs_compat" WAJIB agar @supabase/supabase-js & @supabase/ssr
-# (yang memakai sebagian API Node.js) bisa berjalan di Cloudflare Edge Runtime.
-name = "puskesmas-lambuya"
+# (yang memakai sebagian API Node.js) bisa berjalan di Cloudflare Workers runtime.
+name = "website-puskesmas-lambuya"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
-
-pages_build_output_dir = ".vercel/output/static"

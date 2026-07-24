@@ -5,6 +5,8 @@ export type HeroSlide = {
   description: string;
   primaryCta: { label: string; href: string };
   secondaryCta?: { label: string; href: string };
+  /** URL gambar dari Supabase Storage (tabel `slider`). Kosong = pakai placeholder visual. */
+  imageUrl?: string;
 };
 
 export type LayananItem = {

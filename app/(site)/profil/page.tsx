@@ -16,6 +16,11 @@ export const metadata: Metadata = {
     "Profil Puskesmas Lambuya: sejarah, visi misi, motto, maklumat pelayanan, struktur organisasi, SDM, wilayah kerja, dan status akreditasi.",
 };
 
+// Halaman ini berisi komponen async (Struktur Organisasi, SDM) yang mengambil
+// data terbaru dari Supabase setiap kali dibuka.
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
 export default function ProfilPage() {
   return (
     <>

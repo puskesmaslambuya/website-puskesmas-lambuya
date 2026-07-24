@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { ArrowRightIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { getFotoPreview } from "@/lib/data/galeri";
+import type { GaleriFoto } from "@/types/galeri";
 import { cn } from "@/lib/utils";
 
-export default function GaleriPreview() {
-  const foto = getFotoPreview(4);
+type GaleriPreviewProps = {
+  foto: GaleriFoto[];
+};
 
+export default function GaleriPreview({ foto }: GaleriPreviewProps) {
   return (
     <section className="section-y bg-white">
       <div className="container-page">
@@ -30,13 +32,23 @@ export default function GaleriPreview() {
             <div
               key={item.id}
               className={cn(
-                "group relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br",
-                item.color
+                "group relative aspect-square overflow-hidden rounded-2xl",
+                !item.imageUrl && "bg-gradient-to-br",
+                !item.imageUrl && item.color
               )}
             >
-              <div className="flex h-full items-center justify-center">
-                <PhotoIcon className="h-8 w-8 text-slate-400" />
-              </div>
+              {item.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.imageUrl}
+                  alt={item.caption}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center">
+                  <PhotoIcon className="h-8 w-8 text-slate-400" />
+                </div>
+              )}
               <div
                 className="absolute inset-x-0 bottom-0 bg-slate-900/60 px-3 py-2 text-xs text-white
                   opacity-0 transition-opacity group-hover:opacity-100"

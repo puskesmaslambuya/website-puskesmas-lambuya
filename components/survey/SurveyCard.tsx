@@ -37,8 +37,7 @@ export default function SurveyCard({ googleFormUrl }: SurveyCardProps) {
             berarti bagi perbaikan layanan ke depan.
           </p>
         </div>
-        
-          <a
+        <a
           href={googleFormUrl}
           target="_blank"
           rel="noopener noreferrer"

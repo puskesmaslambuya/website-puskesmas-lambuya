@@ -14,8 +14,16 @@ export default function BeritaCard({ berita }: BeritaCardProps) {
       className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white
         shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover"
     >
-      {/* Placeholder cover — ganti dengan foto berita asli */}
-      <div className={cn("aspect-[16/9] bg-gradient-to-br", berita.coverColor)} />
+      {berita.coverImageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={berita.coverImageUrl}
+          alt={berita.title}
+          className="aspect-[16/9] w-full object-cover"
+        />
+      ) : (
+        <div className={cn("aspect-[16/9] bg-gradient-to-br", berita.coverColor)} />
+      )}
 
       <div className="flex flex-1 flex-col p-5">
         <span className="w-fit rounded-full bg-secondary-50 px-2.5 py-1 text-xs font-semibold text-secondary-dark">

@@ -1,12 +1,14 @@
 import Link from "next/link";
 import { CalendarDaysIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { getBeritaTerbaru } from "@/lib/data/berita";
+import type { Berita } from "@/types/berita";
 import { cn, formatTanggalIndonesia } from "@/lib/utils";
 
-export default function BeritaTerbaru() {
-  const berita = getBeritaTerbaru(3);
+type BeritaTerbaruProps = {
+  berita: Berita[];
+};
 
+export default function BeritaTerbaru({ berita }: BeritaTerbaruProps) {
   return (
     <section className="section-y bg-white">
       <div className="container-page">
@@ -33,8 +35,17 @@ export default function BeritaTerbaru() {
               className="group flex flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white
                 shadow-card transition-all hover:-translate-y-1 hover:shadow-card-hover"
             >
-              {/* Placeholder cover — ganti dengan foto berita asli */}
-              <div className={cn("aspect-[16/9] bg-gradient-to-br", item.coverColor)} />
+              {/* Foto sampul asli (jika ada), atau placeholder gradasi */}
+              {item.coverImageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.coverImageUrl}
+                  alt={item.title}
+                  className="aspect-[16/9] w-full object-cover"
+                />
+              ) : (
+                <div className={cn("aspect-[16/9] bg-gradient-to-br", item.coverColor)} />
+              )}
 
               <div className="flex flex-1 flex-col p-5">
                 <span className="w-fit rounded-full bg-secondary-50 px-2.5 py-1 text-xs font-semibold text-secondary-dark">

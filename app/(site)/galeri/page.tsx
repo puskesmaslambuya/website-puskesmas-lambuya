@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/ui/PageHeader";
 import GaleriTabs from "@/components/galeri/GaleriTabs";
-import { DAFTAR_FOTO, DAFTAR_VIDEO, getKategoriFoto } from "@/lib/data/galeri";
+import { fetchAllFoto, fetchAllVideo, fetchKategoriFoto } from "@/lib/data/galeri";
 
 export const metadata: Metadata = {
   title: "Galeri",
@@ -9,10 +9,16 @@ export const metadata: Metadata = {
     "Dokumentasi foto dan video kegiatan pelayanan kesehatan Puskesmas Lambuya bersama masyarakat.",
 };
 
-export default function GaleriPage() {
-  const daftarFoto = [...DAFTAR_FOTO].sort((a, b) => (a.date < b.date ? 1 : -1));
-  const daftarVideo = [...DAFTAR_VIDEO].sort((a, b) => (a.date < b.date ? 1 : -1));
-  const kategoriFoto = getKategoriFoto();
+// Halaman ini butuh data terbaru dari Supabase setiap kali dibuka.
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
+export default async function GaleriPage() {
+  const [daftarFoto, daftarVideo, kategoriFoto] = await Promise.all([
+    fetchAllFoto(),
+    fetchAllVideo(),
+    fetchKategoriFoto(),
+  ]);
 
   return (
     <>

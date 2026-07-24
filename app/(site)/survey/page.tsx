@@ -11,7 +11,9 @@ export const metadata: Metadata = {
     "Isi Survey Kepuasan Masyarakat (SKM) Puskesmas Lambuya melalui kode QR atau link survey.",
 };
 
+// Halaman ini butuh data terbaru dari Supabase setiap kali dibuka.
 export const dynamic = "force-dynamic";
+// Wajib untuk Cloudflare Pages (next-on-pages mensyaratkan edge runtime untuk halaman dinamis)
 export const runtime = "edge";
 
 async function getGoogleFormUrl() {

@@ -1,4 +1,5 @@
 import type { Dokumen, DokumenKategori } from "@/types/download";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 /**
  * Semua data di file ini adalah DATA CONTOH.
@@ -134,4 +135,41 @@ export const DAFTAR_DOKUMEN: Dokumen[] = [
 
 export function getKategoriDokumen(): DokumenKategori[] {
   return Array.from(new Set(DAFTAR_DOKUMEN.map((item) => item.category)));
+}
+
+/**
+ * Ambil semua dokumen dari Supabase (tabel `dokumen`), diurutkan dari tanggal
+ * terbaru. Jika kosong atau error, kembalikan data contoh statis.
+ */
+export async function fetchAllDokumen(): Promise<Dokumen[]> {
+  try {
+    const supabase = createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("dokumen")
+      .select("*")
+      .order("tanggal", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return [...DAFTAR_DOKUMEN].sort((a, b) => (a.date < b.date ? 1 : -1));
+    }
+
+    return data.map((row) => ({
+      id: String(row.id),
+      title: row.title,
+      category: row.category as Dokumen["category"],
+      description: row.description ?? "",
+      fileType: row.file_type as Dokumen["fileType"],
+      fileSize: row.file_size ?? "",
+      date: row.tanggal,
+      fileUrl: row.file_url,
+    }));
+  } catch {
+    return [...DAFTAR_DOKUMEN].sort((a, b) => (a.date < b.date ? 1 : -1));
+  }
+}
+
+/** Daftar kategori dokumen yang benar-benar dipakai (Supabase, fallback statis). */
+export async function fetchKategoriDokumen(): Promise<DokumenKategori[]> {
+  const semua = await fetchAllDokumen();
+  return Array.from(new Set(semua.map((item) => item.category)));
 }

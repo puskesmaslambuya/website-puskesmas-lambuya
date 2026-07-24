@@ -33,8 +33,23 @@ export default function FotoLightbox({ foto, onClose }: FotoLightboxProps) {
             onClick={(event) => event.stopPropagation()}
             className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-card-hover"
           >
-            <div className={cn("relative flex aspect-[4/3] items-center justify-center bg-gradient-to-br", foto.color)}>
-              <PhotoIcon className="h-16 w-16 text-white/70" />
+            <div
+              className={cn(
+                "relative flex aspect-[4/3] items-center justify-center",
+                !foto.imageUrl && "bg-gradient-to-br",
+                !foto.imageUrl && foto.color
+              )}
+            >
+              {foto.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={foto.imageUrl}
+                  alt={foto.caption}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <PhotoIcon className="h-16 w-16 text-white/70" />
+              )}
               <button
                 type="button"
                 onClick={onClose}

@@ -17,4 +17,6 @@ export type Berita = {
   author: string;
   /** Dipakai untuk placeholder visual (gradasi warna) sebelum ada foto asli. */
   coverColor: string;
+  /** URL gambar sampul asli dari Supabase Storage (tabel `berita`), jika ada. */
+  coverImageUrl?: string;
 };

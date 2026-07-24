@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/ui/PageHeader";
 import DokumenExplorer from "@/components/download/DokumenExplorer";
-import { DAFTAR_DOKUMEN, getKategoriDokumen } from "@/lib/data/download";
+import { fetchAllDokumen, fetchKategoriDokumen } from "@/lib/data/download";
 
 export const metadata: Metadata = {
   title: "Download Dokumen",
@@ -9,9 +9,15 @@ export const metadata: Metadata = {
     "Unduh SOP, SK, formulir, dan dokumen publik Puskesmas Lambuya.",
 };
 
-export default function DownloadPage() {
-  const daftarDokumen = [...DAFTAR_DOKUMEN].sort((a, b) => (a.date < b.date ? 1 : -1));
-  const kategori = getKategoriDokumen();
+// Halaman ini butuh data terbaru dari Supabase setiap kali dibuka.
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
+export default async function DownloadPage() {
+  const [daftarDokumen, kategori] = await Promise.all([
+    fetchAllDokumen(),
+    fetchKategoriDokumen(),
+  ]);
 
   return (
     <>

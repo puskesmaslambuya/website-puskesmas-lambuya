@@ -3,18 +3,18 @@ import { notFound } from "next/navigation";
 import PageHeader from "@/components/ui/PageHeader";
 import BeritaDetailContent from "@/components/berita/BeritaDetailContent";
 import BeritaTerkait from "@/components/berita/BeritaTerkait";
-import { DAFTAR_BERITA, getBeritaBySlug, getBeritaTerkait } from "@/lib/data/berita";
+import { fetchBeritaBySlug, fetchBeritaTerkait } from "@/lib/data/berita";
 
 type BeritaDetailPageProps = {
   params: { slug: string };
 };
 
-export function generateStaticParams() {
-  return DAFTAR_BERITA.map((item) => ({ slug: item.slug }));
-}
+// Halaman ini butuh data terbaru dari Supabase setiap kali dibuka.
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
-export function generateMetadata({ params }: BeritaDetailPageProps): Metadata {
-  const berita = getBeritaBySlug(params.slug);
+export async function generateMetadata({ params }: BeritaDetailPageProps): Promise<Metadata> {
+  const berita = await fetchBeritaBySlug(params.slug);
 
   if (!berita) {
     return { title: "Berita Tidak Ditemukan" };
@@ -26,14 +26,14 @@ export function generateMetadata({ params }: BeritaDetailPageProps): Metadata {
   };
 }
 
-export default function BeritaDetailPage({ params }: BeritaDetailPageProps) {
-  const berita = getBeritaBySlug(params.slug);
+export default async function BeritaDetailPage({ params }: BeritaDetailPageProps) {
+  const berita = await fetchBeritaBySlug(params.slug);
 
   if (!berita) {
     notFound();
   }
 
-  const beritaTerkait = getBeritaTerkait(params.slug);
+  const beritaTerkait = await fetchBeritaTerkait(params.slug);
 
   return (
     <>

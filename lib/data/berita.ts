@@ -1,4 +1,12 @@
 import type { Berita, BeritaKategori } from "@/types/berita";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+
+const COVER_COLORS = [
+  "from-primary/20 to-primary/5",
+  "from-secondary/20 to-secondary/5",
+  "from-primary/20 to-secondary/5",
+  "from-secondary/20 to-primary/5",
+];
 
 /**
  * Semua data di file ini adalah DATA CONTOH.
@@ -131,4 +139,71 @@ export function getBeritaTerkait(slug: string, limit = 3): Berita[] {
 
 export function getKategoriBerita(): BeritaKategori[] {
   return Array.from(new Set(DAFTAR_BERITA.map((item) => item.category)));
+}
+
+/**
+ * Ambil semua berita yang dipublikasikan dari Supabase (tabel `berita`),
+ * diurutkan dari tanggal terbaru. Jika kosong atau error, kembalikan data
+ * contoh statis (DAFTAR_BERITA).
+ */
+export async function fetchAllBerita(): Promise<Berita[]> {
+  try {
+    const supabase = createSupabaseServerClient();
+    const { data, error } = await supabase
+      .from("berita")
+      .select("*")
+      .eq("is_published", true)
+      .order("published_at", { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return [...DAFTAR_BERITA].sort((a, b) => (a.date < b.date ? 1 : -1));
+    }
+
+    return data.map((row, index) => ({
+      id: String(row.id),
+      slug: row.slug,
+      category: row.category as BeritaKategori,
+      title: row.title,
+      excerpt: row.excerpt,
+      content: String(row.content ?? "")
+        .split("\n\n")
+        .map((p) => p.trim())
+        .filter(Boolean),
+      date: row.published_at,
+      author: "Admin Puskesmas Lambuya",
+      coverColor: COVER_COLORS[index % COVER_COLORS.length],
+      coverImageUrl: row.cover_url || undefined,
+    }));
+  } catch {
+    return [...DAFTAR_BERITA].sort((a, b) => (a.date < b.date ? 1 : -1));
+  }
+}
+
+/** Berita terbaru (Supabase, fallback statis), dibatasi sejumlah `limit`. */
+export async function fetchBeritaTerbaru(limit: number): Promise<Berita[]> {
+  const semua = await fetchAllBerita();
+  return semua.slice(0, limit);
+}
+
+/** Cari satu berita berdasarkan slug (Supabase, fallback statis). */
+export async function fetchBeritaBySlug(slug: string): Promise<Berita | undefined> {
+  const semua = await fetchAllBerita();
+  return semua.find((item) => item.slug === slug);
+}
+
+/** Berita lain dalam kategori yang sama (Supabase, fallback statis). */
+export async function fetchBeritaTerkait(slug: string, limit = 3): Promise<Berita[]> {
+  const semua = await fetchAllBerita();
+  const current = semua.find((item) => item.slug === slug);
+  if (!current) return [];
+
+  return semua
+    .filter((item) => item.slug !== slug && item.category === current.category)
+    .slice(0, limit);
+}
+
+/** Daftar kategori yang benar-benar dipakai (Supabase, fallback statis). */
+export async function fetchKategoriBerita(): Promise<BeritaKategori[]> {
+  const semua = await fetchAllBerita();
+  return Array.from(new Set(semua.map((item) => item.category)));
 }

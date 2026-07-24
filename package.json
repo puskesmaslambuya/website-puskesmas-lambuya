@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
-    "pages:build": "npx @cloudflare/next-on-pages@1",
-    "preview": "npm run pages:build && npx wrangler pages dev .vercel/output/static"
+    "deploy": "npx wrangler@4 deploy",
+    "preview": "npx wrangler@4 dev"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
@@ -30,7 +30,6 @@
     "eslint-config-next": "14.2.35",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
-    "typescript": "^5.6.3",
-    "@cloudflare/next-on-pages": "^1.13.5"
+    "typescript": "^5.6.3"
   }
 }

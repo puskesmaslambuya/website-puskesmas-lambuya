@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/ui/PageHeader";
 import BeritaList from "@/components/berita/BeritaList";
-import { DAFTAR_BERITA, getKategoriBerita } from "@/lib/data/berita";
+import { fetchAllBerita, fetchKategoriBerita } from "@/lib/data/berita";
 
 export const metadata: Metadata = {
   title: "Berita",
@@ -9,9 +9,15 @@ export const metadata: Metadata = {
     "Kumpulan berita, kegiatan, dan artikel kesehatan terbaru dari Puskesmas Lambuya.",
 };
 
-export default function BeritaPage() {
-  const daftarBerita = [...DAFTAR_BERITA].sort((a, b) => (a.date < b.date ? 1 : -1));
-  const kategori = getKategoriBerita();
+// Halaman ini butuh data terbaru dari Supabase setiap kali dibuka.
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
+export default async function BeritaPage() {
+  const [daftarBerita, kategori] = await Promise.all([
+    fetchAllBerita(),
+    fetchKategoriBerita(),
+  ]);
 
   return (
     <>

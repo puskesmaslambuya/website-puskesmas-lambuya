@@ -1,8 +1,12 @@
 import { ClockIcon } from "@heroicons/react/24/outline";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { JADWAL_PELAYANAN } from "@/lib/data/home";
+import type { JadwalItem } from "@/types/home";
 
-export default function JadwalPelayanan() {
+type JadwalPelayananProps = {
+  jadwal: JadwalItem[];
+};
+
+export default function JadwalPelayanan({ jadwal }: JadwalPelayananProps) {
   return (
     <section id="jadwal-pelayanan" className="section-y bg-surface-muted">
       <div className="container-page">
@@ -22,7 +26,7 @@ export default function JadwalPelayanan() {
               </tr>
             </thead>
             <tbody>
-              {JADWAL_PELAYANAN.map((item, index) => (
+              {jadwal.map((item, index) => (
                 <tr
                   key={item.id}
                   className={index % 2 === 1 ? "bg-surface-muted" : "bg-white"}

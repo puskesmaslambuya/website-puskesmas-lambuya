@@ -20,13 +20,19 @@ export default function FotoCard({ foto, onClick }: FotoCardProps) {
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "group relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br text-left",
-        foto.color
+        "group relative aspect-square overflow-hidden rounded-2xl text-left",
+        !foto.imageUrl && "bg-gradient-to-br",
+        !foto.imageUrl && foto.color
       )}
     >
-      <div className="flex h-full items-center justify-center">
-        <PhotoIcon className="h-8 w-8 text-slate-400" />
-      </div>
+      {foto.imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={foto.imageUrl} alt={foto.caption} className="h-full w-full object-cover" />
+      ) : (
+        <div className="flex h-full items-center justify-center">
+          <PhotoIcon className="h-8 w-8 text-slate-400" />
+        </div>
+      )}
       <div
         className="absolute inset-0 flex items-end bg-slate-900/0 p-3 transition-colors
           group-hover:bg-slate-900/50"
